@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
-	"zeri/internal/cache"
 	"zeri/internal/config"
-	"zeri/internal/database"
+	"zeri/pkg/cache"
+	"zeri/pkg/database"
 )
 
 var CONF = config.CONF
