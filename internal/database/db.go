@@ -18,7 +18,7 @@ func InitDataBase() error {
 	dbtype := CONF.GetString("database", "db_type")
 	switch dbtype {
 	case "mysql":
-		dsn = mysqlOptsInstance.dsn()
+		dsn = mysqlOpts.dsn()
 	default:
 		return fmt.Errorf("the does not support database type %s, only support `mysql`", dbtype)
 	}
@@ -29,9 +29,13 @@ func InitDataBase() error {
 		return err
 	}
 
-	if err := DB.AutoMigrate(); err != nil {
+	if err := registerTables(DB); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func registerTables(db *gorm.DB) error {
+	return db.AutoMigrate()
 }

@@ -10,7 +10,7 @@ type mysqlOptions struct {
 	dbName   string
 }
 
-var mysqlOptsInstance = func() mysqlOptions {
+var mysqlOpts = func() mysqlOptions {
 	group := "database"
 
 	return mysqlOptions{
