@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"time"
@@ -15,12 +16,17 @@ import (
 
 var CONF = config.CONF
 
-func main() {
+func init() {
 	// configuration
 	if err := CONF.LoadConfiguration("config.conf"); err != nil {
-		log.Errorf("load configuration config.conf failed: %v", err)
-		return
+		err := fmt.Errorf("load configuration config.conf failed: %v", err)
+		panic(err)
 	}
+}
+
+func main() {
+	// set log level.
+	setLogrus()
 
 	// database
 	if err := database.InitDataBase(); err != nil {
@@ -50,4 +56,18 @@ func httpServer(h http.Handler, addr string) http.Server {
 		WriteTimeout:      20 * time.Second,
 		ReadHeaderTimeout: 20 * time.Second,
 	}
+}
+
+func setLogrus() {
+	level := CONF.GetString("logger", "level")
+	l, err := log.ParseLevel(level)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"level": level,
+			"error": err.Error(),
+		}).Error("parse level of the configuration failed, will default set info level")
+		log.SetLevel(log.InfoLevel)
+		return
+	}
+	log.SetLevel(l)
 }
