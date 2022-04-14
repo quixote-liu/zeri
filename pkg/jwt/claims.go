@@ -1,9 +1,9 @@
 package jwt
 
-import "github.com/golang-jwt/jwt"
+import "github.com/golang-jwt/jwt/v4"
 
 type CustomClaims struct {
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 	BaseClaims
 }
 
