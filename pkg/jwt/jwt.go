@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -10,14 +11,9 @@ import (
 	"zeri/internal/config"
 )
 
-var (
-	TokenExpired     = errors.New("token is expired")
-	TokenNotValidYet = errors.New("token not active yet")
-	TokenMalformed   = errors.New("that is not even a token")
-	TokenInvalid     = errors.New("cloud not handle this token")
-)
-
 type Client interface {
+	CreateToken(claim BaseClaims) (string, error)
+	ParseToken(tokenString string) (*CustomClaims, error)
 }
 
 type client struct {
@@ -61,16 +57,32 @@ func (c *client) registeredClaims() jwt.RegisteredClaims {
 	}
 }
 
-func (c *client) ParseToken(tokenString string) (CustomClaims, error) {
+var (
+	ErrfooTokenExpired     = errors.New("token is expired")
+	ErrfooTokenNotValidYet = errors.New("token not active yet")
+	ErrfooTokenMalformed   = errors.New("that is not even a token")
+)
+
+func (c *client) ParseToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return c.signingKey, nil
 	})
-	if token.Valid {
-		cc := CustomClaims{}
-	}
 	if err != nil {
-		switch err.(type) {
-
+		if errors.Is(err, jwt.ErrTokenMalformed) {
+			return nil, ErrfooTokenMalformed
 		}
+		if errors.Is(err, jwt.ErrTokenExpired) {
+			return nil, ErrfooTokenExpired
+		}
+		if errors.Is(err, jwt.ErrTokenNotValidYet) {
+			return nil, ErrfooTokenNotValidYet
+		}
+		return nil, fmt.Errorf("clould not handle this token: %v", err)
 	}
+
+	cc, ok := token.Claims.(*CustomClaims)
+	if !ok {
+		return nil, fmt.Errorf("parse token string into custom claims failed")
+	}
+	return cc, nil
 }
