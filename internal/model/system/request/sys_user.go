@@ -1,6 +1,6 @@
 package request
 
-import model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
+import model "zeri/internal/model/system"
 
 // User register structure
 type Register struct {
@@ -14,10 +14,10 @@ type Register struct {
 
 // User login structure
 type Login struct {
-	Username  string `json:"username"`  // 用户名
-	Password  string `json:"password"`  // 密码
-	Captcha   string `json:"captcha"`   // 验证码
-	CaptchaId string `json:"captchaId"` // 验证码ID
+	Username  string `json:"username" binding:"required"`  // 用户名
+	Password  string `json:"password" binding:"required"`  // 密码
+	Captcha   string `json:"captcha" binding:"required"`   // 验证码
+	CaptchaId string `json:"captchaId" binding:"required"` // 验证码ID
 }
 
 // Modify password structure
