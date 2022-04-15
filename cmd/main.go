@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
 	"zeri/internal/config"
+	"zeri/internal/handler"
 	"zeri/pkg/cache"
 	"zeri/pkg/database"
 )
@@ -25,8 +25,8 @@ func init() {
 }
 
 func main() {
-	// set log level.
-	setLogrus()
+	// set logrus.
+	setupLogrus()
 
 	// database
 	if err := database.InitDataBase(); err != nil {
@@ -40,13 +40,14 @@ func main() {
 		return
 	}
 
-	r := gin.Default()
+	r := handler.Router()
 
 	host := CONF.GetString("server", "host")
 	port := CONF.GetString("server", "port")
 	addr := net.JoinHostPort(host, port)
 	s := httpServer(r, addr)
-	s.ListenAndServe()
+	log.Info("start zeri server on %s", addr)
+	log.Error(s.ListenAndServe())
 }
 
 func httpServer(h http.Handler, addr string) http.Server {
@@ -58,7 +59,7 @@ func httpServer(h http.Handler, addr string) http.Server {
 	}
 }
 
-func setLogrus() {
+func setupLogrus() {
 	level := CONF.GetString("logger", "level")
 	l, err := log.ParseLevel(level)
 	if err != nil {
