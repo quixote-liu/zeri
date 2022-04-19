@@ -1,8 +1,7 @@
-package respository
+package repository
 
 import (
 	"zeri/internal/model/system"
-	"zeri/pkg/database"
 
 	"gorm.io/gorm"
 )
@@ -15,10 +14,8 @@ type userRepository struct {
 	db *gorm.DB
 }
 
-func NewUserRepository() UserRepository {
-	return &userRepository{
-		db: database.DB,
-	}
+func NewUserRepository(db *gorm.DB) UserRepository {
+	return &userRepository{db: db}
 }
 
 func (rep *userRepository) FindUserByNamePass(userName, password string) (system.SysUser, error) {

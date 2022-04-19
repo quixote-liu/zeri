@@ -31,6 +31,7 @@ func New() Client {
 func (c *client) CreateToken(claim BaseClaims) (string, error) {
 	clm := CustomClaims{
 		BaseClaims:       claim,
+		BufferTime:       config.CONF.GetInt("jwt", "buffer_time"),
 		RegisteredClaims: c.registeredClaims(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, clm)

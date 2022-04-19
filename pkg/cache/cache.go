@@ -7,6 +7,8 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+var ErrfooRedisNil = redis.Nil
+
 type Client interface {
 	Set(key string, value interface{}) error
 	SetWithTime(key string, value interface{}, expiration time.Duration) error

@@ -3,6 +3,8 @@ package database
 import (
 	"fmt"
 	"zeri/internal/config"
+	"zeri/internal/model/example"
+	"zeri/internal/model/system"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -37,5 +39,27 @@ func InitDataBase() error {
 }
 
 func registerTables(db *gorm.DB) error {
-	return db.AutoMigrate()
+	tables := []interface{}{
+		// 系统模块表
+		system.SysApi{},
+		system.SysUser{},
+		system.SysBaseMenu{},
+		system.JwtBlacklist{},
+		system.SysAuthority{},
+		system.SysDictionary{},
+		system.SysOperationRecord{},
+		system.SysAutoCodeHistory{},
+		system.SysDictionaryDetail{},
+		system.SysBaseMenuParameter{},
+		system.SysBaseMenuBtn{},
+		system.SysAuthorityBtn{},
+		system.SysAutoCode{},
+
+		// 示例模块表
+		example.ExaFile{},
+		example.ExaCustomer{},
+		example.ExaFileChunk{},
+		example.ExaFileUploadAndDownload{},
+	}
+	return db.AutoMigrate(tables...)
 }

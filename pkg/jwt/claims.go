@@ -4,11 +4,12 @@ import "github.com/golang-jwt/jwt/v4"
 
 type CustomClaims struct {
 	jwt.RegisteredClaims
+	BufferTime int
 	BaseClaims
 }
 
 type BaseClaims struct {
-	BufferTime  string
+	ID          uint
 	UUID        string
 	UserName    string
 	NickName    string
