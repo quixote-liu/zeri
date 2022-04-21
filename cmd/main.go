@@ -57,7 +57,7 @@ func httpServer(h http.Handler, addr string) http.Server {
 }
 
 func setupLogrus() {
-	level := CONF.GetString("logger", "level")
+	level := CONF.GetString("system", "log_level")
 	l, err := log.ParseLevel(level)
 	if err != nil {
 		log.WithFields(log.Fields{
