@@ -39,8 +39,8 @@ func main() {
 
 	r := handler.Router()
 
-	host := CONF.GetString("server", "host")
-	port := CONF.GetString("server", "port")
+	host := CONF.GetString("system", "host")
+	port := CONF.GetString("system", "port")
 	addr := net.JoinHostPort(host, port)
 	s := httpServer(r, addr)
 	log.Infof("start zeri server on %s", addr)

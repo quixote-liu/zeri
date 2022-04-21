@@ -9,9 +9,11 @@ func init() {
 var CONF = config.CONF
 
 func serverConfig() {
-	group := config.NewGroup("server")
+	group := config.NewGroup("system")
 
 	group.SetString("host", "127.0.0.1")
-	group.SetString("port", "8080")
+	group.SetString("port", "8888")
+	group.SetString("db_type", "mysql")
+	group.SetBool("multipoint", false)
 	CONF.RegisterGroup(group)
 }

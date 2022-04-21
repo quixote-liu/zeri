@@ -14,7 +14,7 @@ var DB *gorm.DB
 func InitDataBase() error {
 	var err error
 
-	dbtype := config.CONF.GetString("database", "db_type")
+	dbtype := config.CONF.GetString("system", "db_type")
 
 	switch dbtype {
 	case "mysql":
