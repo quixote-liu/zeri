@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net"
 	"net/http"
 	"time"
@@ -16,15 +15,13 @@ import (
 
 var CONF = config.CONF
 
-func init() {
-	// configuration
-	if err := CONF.LoadConfiguration("config.conf"); err != nil {
-		err := fmt.Errorf("load configuration config.conf failed: %v", err)
-		panic(err)
-	}
-}
-
 func main() {
+	// parse configuration
+	if err := CONF.LoadConfiguration("config.conf"); err != nil {
+		log.Errorf("load configuration config.conf failed: %v", err)
+		return
+	}
+
 	// set logrus.
 	setupLogrus()
 
@@ -46,7 +43,7 @@ func main() {
 	port := CONF.GetString("server", "port")
 	addr := net.JoinHostPort(host, port)
 	s := httpServer(r, addr)
-	log.Info("start zeri server on %s", addr)
+	log.Infof("start zeri server on %s", addr)
 	log.Error(s.ListenAndServe())
 }
 
